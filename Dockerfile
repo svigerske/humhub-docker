@@ -64,6 +64,10 @@ RUN chmod 600 /etc/crontabs/nginx && \
     chmod +x /usr/local/bin/docker-entrypoint.sh && \
     echo "$HUMHUB_VERSION" > /usr/src/humhub/.version
 
+# https://serverfault.com/questions/813498/php-fpm-7-server-reached-pm-max-children/855736
+RUN sed -i -e "s/pm.max_children = [0-9]*/pm.max_children = 25/" /etc/php7/php-fpm.d/www.conf && \
+    sed -i -e "s/pm.max_children = [0-9]*/pm.max_children = 25/" /etc/php-fpm.d/pool.conf
+
 VOLUME /var/www/localhost/htdocs/uploads
 VOLUME /var/www/localhost/htdocs/protected/config
 VOLUME /var/www/localhost/htdocs/protected/modules
